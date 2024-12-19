@@ -1,36 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/product.controller');
-const multer=require('multer');
+const multer = require('multer');
+const path = require('path');
 
-const FileStorage=multer.diskStorage({
-    destination:(req,file,callback)=>{
-        callback(null, '../Frontend/public/Profile');
+// Cấu hình Multer
+const FileStorage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        const uploadPath = path.join(__dirname, '../uploads');
+        callback(null, uploadPath); // Lưu file vào thư mục uploads
     },
-    filename:(req,file,callback)=>{
-        callback(null,file.originalname);
+    filename: (req, file, callback) => {
+        callback(null, Date.now() + '-' + file.originalname); // Đặt tên file duy nhất
     }
-})
+});
 
-const upload=multer({storage:FileStorage});
+const upload = multer({ storage: FileStorage });
 
-// Add  product
-router.post('/add',upload.single('file'),controller.addProduct);
-
-
-// Get all products
+// Routes
+router.post('/add', upload.single('file'), controller.addProduct);
 router.get('/', controller.getProducts);
-
-
-// Update products details
-router.patch('/edit/:id',upload.single('file'), controller.updateProductsDetails);
-
-
-// Remove a products
+router.patch('/edit/:id', upload.single('file'), controller.updateProductsDetails);
 router.delete('/remove/:id', controller.removeProduct);
-
-
-//Filter by products
-router.get('/filter/:status',controller.FilterByCategory);
+router.get('/filter/:status', controller.FilterByCategory);
 
 module.exports = router;

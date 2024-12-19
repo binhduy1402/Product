@@ -2,12 +2,19 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/product.controller');
 const multer = require('multer');
+const fs = require('fs');
 const path = require('path');
+
+// Đảm bảo thư mục uploads tồn tại
+const uploadPath = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+    console.log('Created uploads directory:', uploadPath);
+}
 
 // Cấu hình Multer
 const FileStorage = multer.diskStorage({
     destination: (req, file, callback) => {
-        const uploadPath = path.join(__dirname, '../uploads');
         callback(null, uploadPath); // Lưu file vào thư mục uploads
     },
     filename: (req, file, callback) => {

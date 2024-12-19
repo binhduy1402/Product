@@ -5,31 +5,44 @@ const dotenv = require("dotenv");
 const connectDB = require('./connection');
 const app = express();
 const cookieParser = require("cookie-parser");
-dotenv.config();
 
-let multer = require('multer');
+dotenv.config();
 
 const PORT = process.env.PORT || 8071;
 
+// Kết nối Database
 connectDB();
 
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
-
-app.use(cors({
-    origin: [
-        "http://localhost:3000",  // Local development URL
-        "https://fe-rfyq.onrender.com",  // Allow the frontend from Render
-        "https://www.binhduy1402.id.vn/" // New URL added
-    ],
-    credentials: true,  // Allow cookies to be sent across origins
-}));
-
 app.use(bodyParser.json());
 
+// Cấu hình CORS
+const allowedOrigins = [
+    "http://localhost:3000",  // Local development URL
+    "https://fe-rfyq.onrender.com",  // Allow the frontend from Render
+    "https://www.binhduy1402.id.vn"  // Production URL
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true, // Allow cookies
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Các phương thức HTTP được phép
+    allowedHeaders: ["Content-Type", "Authorization"], // Các tiêu đề được phép
+}));
+
+// Định tuyến API sản phẩm
 const productAPI = require('./api/product.api');
 app.use('/products', productAPI);
 
+// Bắt đầu server
 app.listen(PORT, () => {
-    console.log('Product Management Service is running');
+    console.log(`Product Management Service is running on port ${PORT}`);
 });

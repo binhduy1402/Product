@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const connectDB = require('./connection');
 const app = express();
 const cookieParser = require("cookie-parser");
+const path = require('path');
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ const allowedOrigins = [
     "https://fe-rfyq.onrender.com",  // Allow the frontend from Render
     "https://www.binhduy1402.id.vn"  // Production URL
 ];
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
     origin: (origin, callback) => {

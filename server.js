@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 const allowedOrigins = [
     "http://localhost:3000",  // Local development URL
     "https://fe-eplh.onrender.com",  // Allow the frontend from Render
-    https://binhduy1402.id.vn"  // Production URL
+    "https://binhduy1402.id.vn"  // Production URL
 ];
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

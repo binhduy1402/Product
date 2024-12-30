@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 // Cấu hình CORS
 const allowedOrigins = [
     "http://localhost:3000",  // Local development URL
-    "https://fe-rfyq.onrender.com",  // Allow the frontend from Render
+    "https://fe-eplh.onrender.com",  // Allow the frontend from Render
     "https://www.binhduy1402.id.vn"  // Production URL
 ];
 
